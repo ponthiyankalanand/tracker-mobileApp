@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 
-export default function home(){
+export default function home({ navigation, route }){
+	/*const text =  this.props.navigation.getParam('userName')
+	const text = this.props.navigation.getParams('userName','nothing sent');*/
+	const token  = navigation.getParam('token');
+
 	return(
 		<View style={styles.container}>
-			<Text style={styles.boldText}>home  page</Text>
+
+			<Text style={styles.boldText}>{ token }</Text>
 			
 			 
 		</View>
