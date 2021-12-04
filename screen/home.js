@@ -9,7 +9,7 @@ export default function home({ navigation, route }){
 	return(
 		<View style={styles.container}>
 
-			<Text style={styles.boldText}>{ token }</Text>
+			<Text>{ token }</Text>
 			
 			 
 		</View>
