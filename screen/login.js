@@ -6,11 +6,12 @@ export default function login( { navigation } ){
 	const [userName, setName] = useState();
 	const [Password, setPassword] = useState();
 	const [serviceID, setserviceID] = useState();
-	const [token, settoken] = useState();
 	const [data, setData] = useState();
+	const [message, setmessage] = useState();
 
-	const pressHandler = () =>{
-		navigation.navigate('Home', {token:data} );
+
+	const pressHandler = (val) =>{
+		navigation.navigate('Home', {token:val} );
 	}
 
 /* get request for fetch token */
@@ -26,13 +27,20 @@ export default function login( { navigation } ){
              	'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: 'user',
-                password: 'admin'
-            })
+                username: userName,
+                password: Password            })
         })
-      		const json = await response.json();
-      		setData(json.token);
-      		pressHandler();
+      		const json = await response.json(); 
+      		if (json.status == "S1177")
+      		{    
+      			pressHandler(json.token);	 
+      		}
+      		else{
+      			console.log("failed")
+      			setmessage('Username or Passowrd wrong')
+      			 
+      		}
+      		
       		
     	}
     	catch (error) {
@@ -48,24 +56,15 @@ export default function login( { navigation } ){
 
 
 	return(
-		<View style={styles.container}>
- 			 
-          	 
-          	 
-            <Text>{data}</Text>
-         	 
-         
+		<View style={styles.container}>     	    
 			<Text style={styles.boldText}>Sync Account</Text>
 			<View style={styles.buttonContainer}>
 			<TextInput style={styles.input} placeholder='User Name'
 			onChangeText={(val) => setName(val)}/>
 			<TextInput style={styles.input} placeholder= 'Password'
 			onChangeText={(val) => setPassword(val)}/>
-			<TextInput style={styles.input} placeholder= 'Service ID'
-			onChangeText={(val) => setserviceID(val)}/>
-
-				
-			<Button title='Sync' onPress={fetchtoken} />
+			<Text style={styles.warning}>{message}</Text>
+			<Button title='Verify Account' onPress={fetchtoken} />
 			</View>
 		</View>
 
@@ -94,6 +93,10 @@ const styles = StyleSheet.create({
 		margin:10
 
 
+	},
+	warning:{
+		color: 'red',
+		margin:10
 	}
 
 })
