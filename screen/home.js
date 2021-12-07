@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, Button, View, SafeAreaView, Text, Alert, TextInput } from 'react-native';
 
 export default function home({ navigation, route }){
-	/*const text =  this.props.navigation.getParam('userName')
-	const text = this.props.navigation.getParams('userName','nothing sent');*/
 	const token  = navigation.getParam('token');
+	const [latitude, setlat] = useState();
+	const [longitude, setlong] = useState();
+	var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+  setlat(crd.latitude);
+  setlong(crd.longitude);
+
+
+}
+
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+const fetchLocation=() => {
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+}
+
+useEffect(() => {
+  fetchLocation()
+ }, []);
+
+setInterval(fetchLocation, 2000)
 
 	return(
 		<View style={styles.container}>
 
-			<Text>{ token }</Text>
-			
+			<Text>{latitude},{ longitude }</Text>
+			 
 			 
 		</View>
 
