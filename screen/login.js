@@ -86,8 +86,7 @@ const styles = StyleSheet.create({
 	buttonContainer:{
 		marginTop:20
 	},
-	input:{
-		boaderWidth: 1,
+	input:{ 
 		borderColor: '#777',
 		padding: 20,
 		margin:10
