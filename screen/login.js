@@ -10,8 +10,8 @@ export default function login( { navigation } ){
 	const [message, setmessage] = useState();
 
 
-	const pressHandler = (val) =>{
-		navigation.navigate('Home', {token:val} );
+	const pressHandler = (val1,val2) =>{
+		navigation.navigate('Home', {token:val1,userID:val2} );
 	}
 
 /* get request for fetch token */
@@ -31,9 +31,9 @@ export default function login( { navigation } ){
                 password: Password            })
         })
       		const json = await response.json(); 
-      		if (json.status == "S1177")
+      		if (json.status == "001")
       		{    
-      			pressHandler(json.token);	 
+      			pressHandler(json.token,json.userID);	 
       		}
       		else{
       			console.log("failed")

@@ -5,8 +5,47 @@ import * as Location from 'expo-location';
 
 export default function home({ navigation, route }){
 	const token  = navigation.getParam('token');
-	const [location, setLocation] = useState(null);
-  	const [errorMsg, setErrorMsg] = useState(null);
+  const userid  = navigation.getParam('userID');
+	//const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  var location='';
+  var message='';
+   
+  async function sendLocation(loc) {
+    console.log(loc.coords.latitude);
+      try {
+        const response = await fetch('http://127.0.0.1:8000/updateLocation',{
+            method: 'post',
+             headers: {
+                Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'token ' + token
+            },
+        body: JSON.stringify({
+        longitude:loc.coords.longitude,
+        latitude:loc.coords.latitude,
+        userID:userid,
+        count:1         
+        })
+        })
+          const json = await response.json(); 
+          if (json.status == "001")
+          {     
+            console.log("location update Success") 
+          }
+          else{
+            console.log("failed")
+            setmessage('location update failed')
+             
+          }
+          
+          
+      }
+      catch (error) {
+          console.error(error);
+      } 
+
+    }
 
   useEffect(() => {
     (async () => {
@@ -22,21 +61,22 @@ export default function home({ navigation, route }){
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      location = await Location.getCurrentPositionAsync({});
+      sendLocation(location);
     })();
   }, []);
 
-  let text = 'Waiting..';
   if (errorMsg) {
-    text = errorMsg;
+    message = errorMsg;
   } else if (location) {
-    text = JSON.stringify(location);
+    //text = JSON.stringify(location);
+    message = "Updated";
+    console.log(location);
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.paragraph}>{text}</Text>
+      <Text style={styles.paragraph}>{message}</Text>
     </View>
   );
 }
