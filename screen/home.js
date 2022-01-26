@@ -8,10 +8,25 @@ export default function home({ navigation, route }){
   const userid  = navigation.getParam('userID');
 	//const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  var location='';
-  var message='';
+  let location='';
+  let message='';
    
-  async function sendLocation(loc) {
+  async function sendLocation() {
+
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+        setErrorMsg(
+          'Oops, this will not work on Snack in an Android emulator. Try it on your device!'
+        );
+        return;
+      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+
     console.log(loc.coords.latitude);
       try {
         const response = await fetch('http://127.0.0.1:8000/updateLocation',{
@@ -47,32 +62,7 @@ export default function home({ navigation, route }){
 
     }
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS === 'android' && !Constants.isDevice) {
-        setErrorMsg(
-          'Oops, this will not work on Snack in an Android emulator. Try it on your device!'
-        );
-        return;
-      }
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      location = await Location.getCurrentPositionAsync({});
-      sendLocation(location);
-    })();
-  }, []);
-
-  if (errorMsg) {
-    message = errorMsg;
-  } else if (location) {
-    //text = JSON.stringify(location);
-    message = "Updated";
-    console.log(location);
-  }
+sendLocation();
 
   return (
     <View style={styles.container}>
