@@ -9,6 +9,9 @@ export default function login( { navigation } ){
 	const pressHandler = (val1,val2) =>{
 		navigation.navigate('Home', {token:val1,userID:val2} );
 	}
+	const SignUP = () =>{
+		navigation.navigate('SignUp');
+	}
 /* get request for fetch token */
 	const [isLoading, setLoading] = useState(true);
   	const fetchtoken = async () => {
@@ -50,6 +53,7 @@ export default function login( { navigation } ){
 					<Text style={styles.warning}>{message}</Text>
 					<Button title='Verify Account' onPress={fetchtoken} />
 				</View>
+				<Button title='SignUP' onPress={SignUP}/>
 			</View>
 		</ImageBackground>
 	);

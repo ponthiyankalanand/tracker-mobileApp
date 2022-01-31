@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ImageBackground,Platform, Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
+import BackgroundTimer from 'react-native-background-timer';
+
 export default function home({ navigation, route }){
 	const token  = navigation.getParam('token');
   const userid  = navigation.getParam('userID');
